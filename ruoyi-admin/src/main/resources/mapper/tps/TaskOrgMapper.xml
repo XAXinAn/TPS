@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.tps.mapper.TaskOrgMapper">
+
+    <resultMap type="TaskOrg" id="TaskOrgResult">
+        <id     property="orgId"      column="org_id"      />
+        <result property="orgName"    column="org_name"    />
+        <result property="org1Id"    column="org1_id"    />
+    </resultMap>
+
+    <sql id="selectTaskOrgVo">
+        select org_id, org_name, org1_id from task_org
+    </sql>
+
+    <select id="selectTaskOrgList" parameterType="TaskOrg" resultMap="TaskOrgResult">
+        <include refid="selectTaskOrgVo"/>
+        <where>
+            <if test="orgId != null and orgId != ''">
+                AND org_id = #{orgId}
+            </if>
+            <if test="orgName != null and orgName != ''">
+                AND org_name like concat('%', #{orgName}, '%')
+            </if>
+            <if test="org1Id != null and org1Id != ''">
+                AND org1_id = #{org1Id}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectTaskOrgSimpleList" resultType="java.util.Map">
+        select
+        org_id as "orgId",
+        org_name as "orgName"
+        from task_org
+        where status = '0'  <!-- 只查询状态正常的组织 -->
+        order by org_id
+    </select>
+</mapper>

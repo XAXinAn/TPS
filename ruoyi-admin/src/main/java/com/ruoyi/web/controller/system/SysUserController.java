@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.ArrayUtils;
@@ -252,5 +254,21 @@ public class SysUserController extends BaseController
     public AjaxResult deptTree(SysDept dept)
     {
         return success(deptService.selectDeptTreeList(dept));
+    }
+
+    @GetMapping("/listAllSimple")
+    public AjaxResult listAllSimple() {
+        // 查询只需要返回userId和nickName
+        List<SysUser> users = userService.selectUserList(new SysUser());
+        List<Map<String, Object>> result = users.stream()
+                .map(user -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("userId", user.getUserId());
+                    map.put("nickName", user.getNickName());
+                    map.put("userName", user.getUserName());
+                    return map;
+                })
+                .collect(Collectors.toList());
+        return AjaxResult.success(result);
     }
 }

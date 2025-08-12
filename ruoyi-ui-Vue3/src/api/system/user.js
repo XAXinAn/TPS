@@ -134,3 +134,14 @@ export function deptTreeSelect() {
     method: 'get'
   })
 }
+
+// 获取所有用户列表（只需要id和nickname）
+export function listAllUsers() {
+  return request({
+    url: '/system/user/listAllSimple',
+    method: 'get',
+    params: {
+      // 可以添加其他查询参数
+    }
+  })
+}
