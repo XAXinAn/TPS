@@ -77,7 +77,7 @@
 
 import { ref, onMounted } from 'vue'
 import { listAllUsers } from '@/api/system/user'
-import { listAllOrgs } from '@/api/tps/org'
+import { listAllOrgs, createTask } from '@/api/tps/create'
 
 const userOptions = ref([])
 const userLoading = ref(false)
@@ -195,20 +195,6 @@ const recipientTypeOptions = ref([{
   "label": "普通员工",
   "value": 2
 }])
-const userIdOptions = ref([{
-  "label": "张三",
-  "value": 1
-}, {
-  "label": "李四",
-  "value": 2
-}])
-const orgIdOptions = ref([{
-  "label": "A区支行",
-  "value": 1
-}, {
-  "label": "B区支行",
-  "value": 2
-}])
 // 上传请求路径
 const attachmentAction = ref('https://jsonplaceholder.typicode.com/posts/')
 // 上传文件列表
@@ -234,7 +220,33 @@ function attachmentBeforeUpload(file) {
 function submitForm() {
   创建任务.value.validate((valid) => {
     if (!valid) return
-    // TODO 提交表单
+
+    // 准备要提交的数据
+    const submitData = {
+      title: formData.value.title,
+      description: formData.value.description,
+      deadline: formData.value.deadline,
+      recipientType: formData.value.recipientType,
+      // 根据接收者类型选择不同的ID数组
+      recipients: formData.value.recipientType === 1
+          ? formData.value.orgId
+          : formData.value.userId,
+      priority: formData.value.priority,
+      confirm: formData.value.confirm,
+      // 如果有附件信息也可以加上
+      attachment: formData.value.attachment
+    }
+
+    // 调用API提交数据
+    proxy.$modal.msgSuccess('表单数据已提交，请查看后端控制台')
+    console.log('准备提交的表单数据:', submitData)
+
+    // TODO: 这里替换为实际的API调用
+    createTask(submitData).then(res => {
+      proxy.$modal.msgSuccess('提交成功')
+    }).catch(err => {
+      proxy.$modal.msgError('提交失败')
+    })
   })
 }
 /**

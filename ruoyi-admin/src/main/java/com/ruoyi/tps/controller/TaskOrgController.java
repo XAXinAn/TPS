@@ -13,14 +13,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/task/org")
+@RequestMapping("/tps/org")
 public class TaskOrgController {
 
     @Autowired
     private ITaskOrgService taskOrgService;
 
-    @GetMapping("/listAllSimple")
-    public AjaxResult listAllSimple() {
+    @GetMapping("/listAllOrgs")
+    public AjaxResult listAllOrgs() {
         List<TaskOrg> orgs = taskOrgService.selectTaskOrgList(new TaskOrg());
         List<Map<String, Object>> result = orgs.stream()
                 .map(org -> {
