@@ -9,7 +9,7 @@ export function listAllOrgs() {
 
 export function createTask(data) {
     return request({
-        url: '/tps/org/createTask',
+        url: '/tps/task/createTask',
         method: 'post',
         data: data
     })
