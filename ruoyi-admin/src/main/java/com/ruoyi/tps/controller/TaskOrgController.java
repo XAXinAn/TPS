@@ -1,5 +1,6 @@
 package com.ruoyi.tps.controller;
 
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.tps.domain.TaskOrg;
 import com.ruoyi.tps.service.ITaskOrgService;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tps/org")
-public class TaskOrgController {
+public class TaskOrgController extends BaseController {
 
     @Autowired
     private ITaskOrgService taskOrgService;

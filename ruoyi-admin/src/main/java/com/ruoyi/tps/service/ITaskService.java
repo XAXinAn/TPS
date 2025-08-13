@@ -2,6 +2,7 @@ package com.ruoyi.tps.service;
 
 import java.util.List;
 import com.ruoyi.tps.domain.Task;
+import org.springframework.stereotype.Service;
 
 /**
  * 任务Service接口
