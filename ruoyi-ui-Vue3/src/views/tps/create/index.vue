@@ -41,7 +41,7 @@
         <el-switch v-model="formData.confirm"></el-switch>
       </el-form-item>
       <el-form-item label="上传" prop="attachment">
-        <FileUpload v-model="formData.attachment"/>
+        <FileUpload v-model="formData.attachment" :file-size="50" :file-type="['doc', 'docx', 'png', 'jpg']"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm">提交</el-button>
