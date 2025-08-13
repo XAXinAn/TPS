@@ -61,10 +61,14 @@
         <el-switch v-model="formData.confirm"></el-switch>
       </el-form-item>
       <el-form-item label="上传" prop="attachment">
-        <el-upload ref="attachment" :file-list="attachmentfileList" :action="attachmentAction" multiple
-                   :before-upload="attachmentBeforeUpload">
-          <el-button size="small" type="primary" icon="el-icon-upload">点击上传</el-button>
-        </el-upload>
+<!--        <el-upload ref="attachment" :file-list="attachmentfileList" :action="attachmentAction" multiple-->
+<!--                   :before-upload="attachmentBeforeUpload">-->
+<!--          <el-button size="small" type="primary" icon="el-icon-upload">点击上传</el-button>-->
+<!--        </el-upload>-->
+        <FileUpload v-model="formData.attachment"
+          :file-size="50"
+          :file-type="['doc', 'docx', 'pdf', 'png', 'jpg']"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm">提交</el-button>
@@ -78,55 +82,12 @@
 import { ref, onMounted } from 'vue'
 import { listAllUsers } from '@/api/system/user'
 import { listAllOrgs, createTask } from '@/api/tps/create'
+import FileUpload from '@/components/FileUpload/index.vue';
 
 const userOptions = ref([])
 const userLoading = ref(false)
 const orgOptions = ref([])
 const orgLoading = ref(false)
-
-// 加载用户数据
-const loadUsers = async () => {
-  try {
-    userLoading.value = true
-    const res = await listAllUsers() // 调用获取用户列表的API
-    userOptions.value = res.data.map(user => ({
-      userId: user.userId,
-      nickName: user.nickName,
-      userName: user.userName,
-    }))
-  } catch (error) {
-    console.error('加载用户列表失败:', error)
-  } finally {
-    userLoading.value = false
-  }
-}
-
-// 组件挂载时加载用户数据
-onMounted(() => {
-  loadUsers()
-})
-
-// 加载支行数据
-const loadOrgs = async () => {
-  try {
-    orgLoading.value = true
-    const res = await listAllOrgs() // 调用获取支行列表的API
-    orgOptions.value = res.data.map(org => ({
-      orgId: org.org_id,    // 数据库字段名
-      orgName: org.org_name, // 数据库字段名
-      org1Id: org.org1_id,
-    }))
-  } catch (error) {
-    console.error('加载支行列表失败:', error)
-  } finally {
-    orgLoading.value = false
-  }
-}
-
-// 组件挂载时加载支行数据
-onMounted(() => {
-  loadOrgs()
-})
 
 const {
   proxy
@@ -142,7 +103,7 @@ const data = reactive({
     orgId: [],
     priority: undefined,
     confirm: false,
-    attachment: null,
+    attachment: "",
   },
   rules: {
     title: [{
@@ -195,23 +156,7 @@ const recipientTypeOptions = ref([{
   "label": "普通员工",
   "value": 2
 }])
-// 上传请求路径
-const attachmentAction = ref('https://jsonplaceholder.typicode.com/posts/')
-// 上传文件列表
-const attachmentfileList = ref([])
-/**
- * @name: 上传之前的文件判断
- * @description: 上传之前的文件判断，判断文件大小文件类型等
- * @param {*} file
- * @return {*}
- */
-function attachmentBeforeUpload(file) {
-  let isRightSize = file.size / 1024 / 1024 < 50
-  if (!isRightSize) {
-    proxy.$modal.msgError('文件大小超过 50MB')
-  }
-  return isRightSize
-}
+
 /**
  * @name: 表单提交
  * @description: 表单提交方法
@@ -257,6 +202,51 @@ function submitForm() {
 function resetForm() {
   创建任务.value.resetFields()
 }
+
+
+// 加载用户数据
+const loadUsers = async () => {
+  try {
+    userLoading.value = true
+    const res = await listAllUsers() // 调用获取用户列表的API
+    userOptions.value = res.data.map(user => ({
+      userId: user.userId,
+      nickName: user.nickName,
+      userName: user.userName,
+    }))
+  } catch (error) {
+    console.error('加载用户列表失败:', error)
+  } finally {
+    userLoading.value = false
+  }
+}
+
+// 组件挂载时加载用户数据
+onMounted(() => {
+  loadUsers()
+})
+
+// 加载支行数据
+const loadOrgs = async () => {
+  try {
+    orgLoading.value = true
+    const res = await listAllOrgs() // 调用获取支行列表的API
+    orgOptions.value = res.data.map(org => ({
+      orgId: org.org_id,    // 数据库字段名
+      orgName: org.org_name, // 数据库字段名
+      org1Id: org.org1_id,
+    }))
+  } catch (error) {
+    console.error('加载支行列表失败:', error)
+  } finally {
+    orgLoading.value = false
+  }
+}
+
+// 组件挂载时加载支行数据
+onMounted(() => {
+  loadOrgs()
+})
 
 </script>
 <style>
