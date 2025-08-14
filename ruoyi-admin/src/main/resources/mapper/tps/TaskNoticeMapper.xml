@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.tps.mapper.TaskNoticeMapper">
+    
+    <resultMap type="TaskNotice" id="TaskNoticeResult">
+        <result property="noticeId"    column="notice_id"    />
+        <result property="taskId"    column="task_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="content"    column="content"    />
+        <result property="noticeType"    column="notice_type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="readTime"    column="read_time"    />
+    </resultMap>
+
+    <sql id="selectTaskNoticeVo">
+        select notice_id, task_id, user_id, content, notice_type, create_time, read_time from task_notice
+    </sql>
+
+    <select id="selectTaskNoticeList" parameterType="TaskNotice" resultMap="TaskNoticeResult">
+        <include refid="selectTaskNoticeVo"/>
+        <where>  
+            <if test="taskId != null "> and task_id = #{taskId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="noticeType != null  and noticeType != ''"> and notice_type = #{noticeType}</if>
+            <if test="readTime != null "> and read_time = #{readTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaskNoticeByNoticeId" parameterType="Long" resultMap="TaskNoticeResult">
+        <include refid="selectTaskNoticeVo"/>
+        where notice_id = #{noticeId}
+    </select>
+
+    <insert id="insertTaskNotice" parameterType="TaskNotice" useGeneratedKeys="true" keyProperty="noticeId">
+        insert into task_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">task_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="noticeType != null and noticeType != ''">notice_type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="readTime != null">read_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">#{taskId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="noticeType != null and noticeType != ''">#{noticeType},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="readTime != null">#{readTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaskNotice" parameterType="TaskNotice">
+        update task_notice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskId != null">task_id = #{taskId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="noticeType != null and noticeType != ''">notice_type = #{noticeType},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="readTime != null">read_time = #{readTime},</if>
+        </trim>
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="deleteTaskNoticeByNoticeId" parameterType="Long">
+        delete from task_notice where notice_id = #{noticeId}
+    </delete>
+
+    <delete id="deleteTaskNoticeByNoticeIds" parameterType="String">
+        delete from task_notice where notice_id in 
+        <foreach item="noticeId" collection="array" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
+    </delete>
+</mapper>
