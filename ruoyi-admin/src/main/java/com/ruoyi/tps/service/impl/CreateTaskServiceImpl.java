@@ -3,9 +3,11 @@ package com.ruoyi.tps.service.impl;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.tps.DTO.TaskCreateDTO;
 import com.ruoyi.tps.domain.Task;
+import com.ruoyi.tps.domain.TaskNotice;
 import com.ruoyi.tps.domain.TaskOrgUserAdminConfig;
 import com.ruoyi.tps.domain.TaskRecipient;
 import com.ruoyi.tps.mapper.TaskMapper;
+import com.ruoyi.tps.mapper.TaskNoticeMapper;
 import com.ruoyi.tps.mapper.TaskOrgUserAdminConfigMapper;
 import com.ruoyi.tps.mapper.TaskRecipientMapper;
 import com.ruoyi.tps.service.ICreateTaskService;
@@ -23,6 +25,8 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
     private TaskMapper taskMapper;
     @Autowired
     private TaskOrgUserAdminConfigMapper taskOrgUserAdminConfigMapper;
+    @Autowired
+    private TaskNoticeMapper taskNoticeMapper;
 
     public int insertTask(TaskCreateDTO taskCreateDTO){
         //TODO
@@ -40,34 +44,48 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
         System.out.println(task);
         row = taskMapper.insertTask(task);
 
-        // 插入 TaskRecipient
+        // 插入 TaskRecipient 和 TaskNotice
         if (taskCreateDTO.getRecipientType() == 2){
-            for (Long id: taskCreateDTO.getRecipients()){
+            for (Long userId: taskCreateDTO.getRecipients()){
                 TaskRecipient taskRecipient = new TaskRecipient();
                 taskRecipient.setTaskId(task.getTaskId());
                 taskRecipient.setRecipientType("普通员工");
-                taskRecipient.setUserId(id);
+                taskRecipient.setUserId(userId);
                 System.out.println(taskRecipient);
                 taskRecipientMapper.insertTaskRecipient(taskRecipient);
+
+                TaskNotice taskNotice = new TaskNotice();
+                taskNotice.setTaskId(task.getTaskId());
+                taskNotice.setUserId(userId);
+                taskNotice.setContent("你有一个新任务：" + task.getTitle());
+                taskNotice.setNoticeType("总行管理部门任务下发");
+                System.out.println(taskNotice);
+                taskNoticeMapper.insertTaskNotice(taskNotice);
             }
         }else if(taskCreateDTO.getRecipientType() == 1){
             for (Long orgId: taskCreateDTO.getRecipients()){
                 TaskRecipient taskRecipient = new TaskRecipient();
                 taskRecipient.setTaskId(task.getTaskId());
                 taskRecipient.setRecipientType("支行管理层");
+
+                TaskNotice taskNotice = new TaskNotice();
+                taskNotice.setTaskId(task.getTaskId());
+                taskNotice.setContent("你有一个新任务：" + task.getTitle());
+                taskNotice.setNoticeType("总行管理部门任务下发");
+
                 TaskOrgUserAdminConfig taskOrgUserAdminConfig = new TaskOrgUserAdminConfig();
                 taskOrgUserAdminConfig.setOrgId(orgId);
                 List<TaskOrgUserAdminConfig> taskOrgUserAdminConfigList = taskOrgUserAdminConfigMapper.selectTaskOrgUserAdminConfigList(taskOrgUserAdminConfig);
                 for (TaskOrgUserAdminConfig config: taskOrgUserAdminConfigList){
                     taskRecipient.setUserId(config.getUserId());
+                    taskNotice.setUserId(config.getUserId());
                     System.out.println(taskRecipient);
+                    System.out.println(taskNotice);
                     taskRecipientMapper.insertTaskRecipient(taskRecipient);
+                    taskNoticeMapper.insertTaskNotice(taskNotice);
                 }
             }
         }
-
-        //插入notice
-
 
         return row;
     }
