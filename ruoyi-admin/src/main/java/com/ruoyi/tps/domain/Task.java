@@ -1,6 +1,6 @@
 package com.ruoyi.tps.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -31,7 +31,7 @@ public class Task extends BaseEntity
     /** 截止日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "截止日期", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date deadline;
+    private LocalDate deadline;
 
     /** 优先级  */
     @Excel(name = "优先级 ")
@@ -79,12 +79,12 @@ public class Task extends BaseEntity
         return description;
     }
 
-    public void setDeadline(Date deadline) 
+    public void setDeadline(LocalDate deadline)
     {
         this.deadline = deadline;
     }
 
-    public Date getDeadline() 
+    public LocalDate getDeadline()
     {
         return deadline;
     }

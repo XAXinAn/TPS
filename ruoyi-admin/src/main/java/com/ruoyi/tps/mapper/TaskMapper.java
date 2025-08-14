@@ -2,6 +2,7 @@ package com.ruoyi.tps.mapper;
 
 import java.util.List;
 import com.ruoyi.tps.domain.Task;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 任务Mapper接口
@@ -9,6 +10,7 @@ import com.ruoyi.tps.domain.Task;
  * @author ruoyi
  * @date 2025-08-13
  */
+@Mapper
 public interface TaskMapper 
 {
     /**

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.tps.mapper.TaskRecipientMapper">
+    
+    <resultMap type="TaskRecipient" id="TaskRecipientResult">
+        <result property="recipientId"    column="recipient_id"    />
+        <result property="taskId"    column="task_id"    />
+        <result property="recipientType"    column="recipient_type"    />
+        <result property="userId"    column="user_id"    />
+        <result property="receiveTime"    column="receive_time"    />
+        <result property="isRead"    column="is_read"    />
+    </resultMap>
+
+    <sql id="selectTaskRecipientVo">
+        select recipient_id, task_id, recipient_type, user_id, receive_time, is_read from task_recipient
+    </sql>
+
+    <select id="selectTaskRecipientList" parameterType="TaskRecipient" resultMap="TaskRecipientResult">
+        <include refid="selectTaskRecipientVo"/>
+        <where>  
+            <if test="taskId != null "> and task_id = #{taskId}</if>
+            <if test="recipientType != null  and recipientType != ''"> and recipient_type = #{recipientType}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="receiveTime != null "> and receive_time = #{receiveTime}</if>
+            <if test="isRead != null "> and is_read = #{isRead}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaskRecipientByRecipientId" parameterType="Long" resultMap="TaskRecipientResult">
+        <include refid="selectTaskRecipientVo"/>
+        where recipient_id = #{recipientId}
+    </select>
+
+    <insert id="insertTaskRecipient" parameterType="TaskRecipient" useGeneratedKeys="true" keyProperty="recipientId">
+        insert into task_recipient
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">task_id,</if>
+            <if test="recipientType != null and recipientType != ''">recipient_type,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="receiveTime != null">receive_time,</if>
+            <if test="isRead != null">is_read,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">#{taskId},</if>
+            <if test="recipientType != null and recipientType != ''">#{recipientType},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="receiveTime != null">#{receiveTime},</if>
+            <if test="isRead != null">#{isRead},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaskRecipient" parameterType="TaskRecipient">
+        update task_recipient
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskId != null">task_id = #{taskId},</if>
+            <if test="recipientType != null and recipientType != ''">recipient_type = #{recipientType},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="receiveTime != null">receive_time = #{receiveTime},</if>
+            <if test="isRead != null">is_read = #{isRead},</if>
+        </trim>
+        where recipient_id = #{recipientId}
+    </update>
+
+    <delete id="deleteTaskRecipientByRecipientId" parameterType="Long">
+        delete from task_recipient where recipient_id = #{recipientId}
+    </delete>
+
+    <delete id="deleteTaskRecipientByRecipientIds" parameterType="String">
+        delete from task_recipient where recipient_id in 
+        <foreach item="recipientId" collection="array" open="(" separator="," close=")">
+            #{recipientId}
+        </foreach>
+    </delete>
+</mapper>
