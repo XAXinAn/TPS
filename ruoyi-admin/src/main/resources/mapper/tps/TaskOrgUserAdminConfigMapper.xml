@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.tps.mapper.TaskOrgUserAdminConfigMapper">
+    
+    <resultMap type="TaskOrgUserAdminConfig" id="TaskOrgUserAdminConfigResult">
+        <result property="orgUserAdminId"    column="org_user_admin_id"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectTaskOrgUserAdminConfigVo">
+        select org_user_admin_id, org_id, user_id from task_org_user_admin_config
+    </sql>
+
+    <select id="selectTaskOrgUserAdminConfigList" parameterType="TaskOrgUserAdminConfig" resultMap="TaskOrgUserAdminConfigResult">
+        <include refid="selectTaskOrgUserAdminConfigVo"/>
+        <where>  
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaskOrgUserAdminConfigByOrgUserAdminId" parameterType="Long" resultMap="TaskOrgUserAdminConfigResult">
+        <include refid="selectTaskOrgUserAdminConfigVo"/>
+        where org_user_admin_id = #{orgUserAdminId}
+    </select>
+
+    <insert id="insertTaskOrgUserAdminConfig" parameterType="TaskOrgUserAdminConfig" useGeneratedKeys="true" keyProperty="orgUserAdminId">
+        insert into task_org_user_admin_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgId != null">org_id,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgId != null">#{orgId},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaskOrgUserAdminConfig" parameterType="TaskOrgUserAdminConfig">
+        update task_org_user_admin_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgId != null">org_id = #{orgId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where org_user_admin_id = #{orgUserAdminId}
+    </update>
+
+    <delete id="deleteTaskOrgUserAdminConfigByOrgUserAdminId" parameterType="Long">
+        delete from task_org_user_admin_config where org_user_admin_id = #{orgUserAdminId}
+    </delete>
+
+    <delete id="deleteTaskOrgUserAdminConfigByOrgUserAdminIds" parameterType="String">
+        delete from task_org_user_admin_config where org_user_admin_id in 
+        <foreach item="orgUserAdminId" collection="array" open="(" separator="," close=")">
+            #{orgUserAdminId}
+        </foreach>
+    </delete>
+</mapper>

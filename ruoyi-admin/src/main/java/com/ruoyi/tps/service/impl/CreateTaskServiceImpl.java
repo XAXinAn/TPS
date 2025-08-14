@@ -33,14 +33,25 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
         System.out.println(task);
         row = taskMapper.insertTask(task);
 
-        for (Long id: taskCreateDTO.getRecipients()){
-            // 插入 TaskRecipient
-            TaskRecipient taskRecipient = new TaskRecipient();
-            taskRecipient.setTaskId(task.getTaskId());
-            taskRecipient.setRecipientType("普通员工");
-            taskRecipient.setUserId(id);
-            taskRecipientMapper.insertTaskRecipient(taskRecipient);
+        // 插入 TaskRecipient
+        if (taskCreateDTO.getRecipientType() == 2){
+            for (Long id: taskCreateDTO.getRecipients()){
+                TaskRecipient taskRecipient = new TaskRecipient();
+                taskRecipient.setTaskId(task.getTaskId());
+                taskRecipient.setRecipientType("普通员工");
+                taskRecipient.setUserId(id);
+                taskRecipientMapper.insertTaskRecipient(taskRecipient);
+            }
+        }else if(taskCreateDTO.getRecipientType() == 1){
+            for (Long id: taskCreateDTO.getRecipients()){
+                TaskRecipient taskRecipient = new TaskRecipient();
+                taskRecipient.setTaskId(task.getTaskId());
+                taskRecipient.setRecipientType("支行管理层");
+                taskRecipient.setUserId(id);
+                taskRecipientMapper.insertTaskRecipient(taskRecipient);
+            }
         }
+
         return row;
     }
 }
