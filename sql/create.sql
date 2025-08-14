@@ -39,22 +39,20 @@ CREATE TABLE IF NOT EXISTS task_recipient (
     CONSTRAINT fk_recipient_user FOREIGN KEY (user_id) REFERENCES sys_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='任务下发对象表';
 
-# CREATE TABLE IF NOT EXISTS task_attachment (
-#     attachment_id BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '附件唯一标识（主键）',
-#     task_id BIGINT(20) NOT NULL COMMENT '关联任务ID',
-#     file_name VARCHAR(255) NOT NULL COMMENT '附件原始文件名',
-#     file_path VARCHAR(512) NOT NULL COMMENT '附件存储路径',
-#     file_size BIGINT NOT NULL COMMENT '附件大小（字节）',
-#     file_type VARCHAR(50) NOT NULL COMMENT '附件类型（如doc、jpg）',
-#     upload_user_id bigint(20) NOT NULL COMMENT '上传人ID（关联sys_user表）',
-#     upload_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上传时间',
-#     PRIMARY KEY (attachment_id),
-#     KEY idx_task_attach (task_id),
-#     KEY idx_upload_user (upload_user_id),
-#     CONSTRAINT fk_attach_task FOREIGN KEY (task_id) REFERENCES task (task_id),
-#     CONSTRAINT fk_attach_user FOREIGN KEY (upload_user_id) REFERENCES sys_user (user_id),
-#     CONSTRAINT ck_file_size CHECK (file_size <= 52428800) -- 限制最大50MB
-# ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='任务附件表';
+CREATE TABLE IF NOT EXISTS task_notice (
+    notice_id BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '通知唯一标识（主键）',
+    task_id BIGINT(20) NOT NULL COMMENT '关联任务ID',
+    user_id bigint(20) NOT NULL COMMENT '通知接收人ID',
+    content VARCHAR(512) NOT NULL COMMENT '通知内容（如：你有一个新任务：XXX）',
+    notice_type VARCHAR(20) NOT NULL DEFAULT '总行管理部门任务下发' COMMENT '通知类型',
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '通知创建时间',
+    read_time DATETIME DEFAULT NULL COMMENT '阅读时间',
+    PRIMARY KEY (notice_id),
+    KEY idx_task_notice (task_id),
+    KEY idx_user_notice (user_id),
+    CONSTRAINT fk_notice_task FOREIGN KEY (task_id) REFERENCES task (task_id),
+    CONSTRAINT fk_notice_user FOREIGN KEY (user_id) REFERENCES sys_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='任务通知表';
 
 CREATE TABLE task_org (
     ORG_ID BIGINT NOT NULL AUTO_INCREMENT COMMENT '支行ID',

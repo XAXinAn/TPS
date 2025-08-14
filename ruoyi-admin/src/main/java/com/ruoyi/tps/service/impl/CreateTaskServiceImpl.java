@@ -28,6 +28,8 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
         //TODO
         int row = 0;
         Task task = new Task();
+
+        System.out.println(taskCreateDTO);
         //插入 Task
         task.setTitle(taskCreateDTO.getTitle());
         task.setDescription(taskCreateDTO.getDescription());
