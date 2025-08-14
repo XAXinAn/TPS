@@ -3,13 +3,16 @@ package com.ruoyi.tps.service.impl;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.tps.DTO.TaskCreateDTO;
 import com.ruoyi.tps.domain.Task;
+import com.ruoyi.tps.domain.TaskOrgUserAdminConfig;
 import com.ruoyi.tps.domain.TaskRecipient;
 import com.ruoyi.tps.mapper.TaskMapper;
+import com.ruoyi.tps.mapper.TaskOrgUserAdminConfigMapper;
 import com.ruoyi.tps.mapper.TaskRecipientMapper;
 import com.ruoyi.tps.service.ICreateTaskService;
-import com.ruoyi.tps.service.ITaskRecipientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CreateTaskServiceImpl implements ICreateTaskService {
@@ -18,6 +21,8 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
     private TaskRecipientMapper taskRecipientMapper;
     @Autowired
     private TaskMapper taskMapper;
+    @Autowired
+    private TaskOrgUserAdminConfigMapper taskOrgUserAdminConfigMapper;
 
     public int insertTask(TaskCreateDTO taskCreateDTO){
         //TODO
@@ -40,15 +45,22 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
                 taskRecipient.setTaskId(task.getTaskId());
                 taskRecipient.setRecipientType("普通员工");
                 taskRecipient.setUserId(id);
+                System.out.println(taskRecipient);
                 taskRecipientMapper.insertTaskRecipient(taskRecipient);
             }
         }else if(taskCreateDTO.getRecipientType() == 1){
-            for (Long id: taskCreateDTO.getRecipients()){
+            for (Long orgId: taskCreateDTO.getRecipients()){
                 TaskRecipient taskRecipient = new TaskRecipient();
                 taskRecipient.setTaskId(task.getTaskId());
                 taskRecipient.setRecipientType("支行管理层");
-                taskRecipient.setUserId(id);
-                taskRecipientMapper.insertTaskRecipient(taskRecipient);
+                TaskOrgUserAdminConfig taskOrgUserAdminConfig = new TaskOrgUserAdminConfig();
+                taskOrgUserAdminConfig.setOrgId(orgId);
+                List<TaskOrgUserAdminConfig> taskOrgUserAdminConfigList = taskOrgUserAdminConfigMapper.selectTaskOrgUserAdminConfigList(taskOrgUserAdminConfig);
+                for (TaskOrgUserAdminConfig config: taskOrgUserAdminConfigList){
+                    taskRecipient.setUserId(config.getUserId());
+                    System.out.println(taskRecipient);
+                    taskRecipientMapper.insertTaskRecipient(taskRecipient);
+                }
             }
         }
 

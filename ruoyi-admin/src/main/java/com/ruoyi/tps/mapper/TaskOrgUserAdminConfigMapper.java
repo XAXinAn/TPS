@@ -2,6 +2,7 @@ package com.ruoyi.tps.mapper;
 
 import java.util.List;
 import com.ruoyi.tps.domain.TaskOrgUserAdminConfig;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 支行管理员配置Mapper接口
@@ -9,6 +10,7 @@ import com.ruoyi.tps.domain.TaskOrgUserAdminConfig;
  * @author ruoyi
  * @date 2025-08-14
  */
+@Mapper
 public interface TaskOrgUserAdminConfigMapper 
 {
     /**
