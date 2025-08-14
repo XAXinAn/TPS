@@ -107,6 +107,7 @@
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['tps:task:edit']">修改</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['tps:task:remove']">删除</el-button>
+          <el-link :href="`${file.url}`"  :download="`${getFileName(file.name)}`" @click.prevent="handleDownload(`${file.url}`,`${getFileName(file.name)}`)" :underline="false" type="success" target="_blank">下载附件</el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -324,6 +325,51 @@ function handleExport() {
   proxy.download('tps/task/export', {
     ...queryParams.value
   }, `task_${new Date().getTime()}.xlsx`)
+}
+
+// 附件下载
+function handleDownload(url, name) {
+
+  var url = url;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true); // 异步
+  xhr.responseType = 'blob'; // blob 类型
+  xhr.onload = function () {
+
+    if (xhr.status !== 200) {
+
+      alert('下载异常！');
+      return;
+
+    }
+    if (window.navigator.msSaveOrOpenBlob) {
+
+      // IE
+      navigator.msSaveBlob(xhr.response, getFileName(name));
+
+    } else {
+
+      var newUrl = window.URL.createObjectURL(xhr.response);
+      var a = document.createElement('a');
+      a.setAttribute('href', newUrl);
+      a.setAttribute('target', '_blank');
+      a.setAttribute('download', getFileName(name)); // 自定义文件名（有效）
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+    }
+
+  };
+  xhr.send();
+}
+
+function getFileName(name) {
+  if (name.lastIndexOf("/") > -1) {
+    return name.slice(name.lastIndexOf("/") + 1);
+  } else {
+    return "";
+  }
 }
 
 getList()
