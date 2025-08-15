@@ -2,14 +2,8 @@ package com.ruoyi.tps.service.impl;
 
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.tps.DTO.TaskCreateDTO;
-import com.ruoyi.tps.domain.Task;
-import com.ruoyi.tps.domain.TaskNotice;
-import com.ruoyi.tps.domain.TaskOrgUserAdminConfig;
-import com.ruoyi.tps.domain.TaskRecipient;
-import com.ruoyi.tps.mapper.TaskMapper;
-import com.ruoyi.tps.mapper.TaskNoticeMapper;
-import com.ruoyi.tps.mapper.TaskOrgUserAdminConfigMapper;
-import com.ruoyi.tps.mapper.TaskRecipientMapper;
+import com.ruoyi.tps.domain.*;
+import com.ruoyi.tps.mapper.*;
 import com.ruoyi.tps.service.ICreateTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +21,8 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
     private TaskOrgUserAdminConfigMapper taskOrgUserAdminConfigMapper;
     @Autowired
     private TaskNoticeMapper taskNoticeMapper;
+    @Autowired
+    private TaskAttachmentMapper taskAttachmentMapper;
 
     public int insertTask(TaskCreateDTO taskCreateDTO){
         //TODO
@@ -85,6 +81,17 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
                     taskNoticeMapper.insertTaskNotice(taskNotice);
                 }
             }
+        }
+
+        //插入 TaskAttachment
+        TaskAttachment taskAttachment = new TaskAttachment();
+        taskAttachment.setTaskId(task.getTaskId());
+        //将taskCreateDTO.getAttachment()根据逗号分割存入String[] attachmentUrl
+        String[] attachmentUrl = taskCreateDTO.getAttachment().split(",");
+        for (String url: attachmentUrl){
+            System.out.println(url);
+            taskAttachment.setAttachmentUrl(url);
+            taskAttachmentMapper.insertTaskAttachment(taskAttachment);
         }
 
         return row;
