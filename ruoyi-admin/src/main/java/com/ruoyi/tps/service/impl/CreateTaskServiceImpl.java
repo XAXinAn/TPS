@@ -2,12 +2,15 @@ package com.ruoyi.tps.service.impl;
 
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.tps.DTO.TaskCreateDTO;
+import com.ruoyi.tps.DTO.TaskCreateWithHaveAttachmentDTO;
 import com.ruoyi.tps.domain.*;
 import com.ruoyi.tps.mapper.*;
 import com.ruoyi.tps.service.ICreateTaskService;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -87,16 +90,26 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
         taskAttachment.setTaskId(task.getTaskId());
         //将taskCreateDTO.getAttachment()根据逗号分割存入String[] attachmentUrl
         String[] attachmentUrl = taskCreateDTO.getAttachment().split(",");
-        for (String url: attachmentUrl){
-            System.out.println(url);
-            taskAttachment.setAttachmentUrl(url);
-            taskAttachmentMapper.insertTaskAttachment(taskAttachment);
+        if(!(attachmentUrl.length == 1 && attachmentUrl[0].equals(""))){
+            for (String url: attachmentUrl){
+                System.out.println(url);
+                taskAttachment.setAttachmentUrl(url);
+                taskAttachmentMapper.insertTaskAttachment(taskAttachment);
+            }
         }
 
         return row;
     }
 
-    public List<Task> selectAllTasks() {
-        return taskMapper.selectTaskList(new Task());
+    public List<TaskCreateWithHaveAttachmentDTO> selectAllTasks() {
+        List<Task> taskList = taskMapper.selectTaskList(new Task());
+        List<TaskCreateWithHaveAttachmentDTO> taskCreateWithHaveAttachmentDTOList = new ArrayList<>();
+        for (Task task : taskList) {
+            TaskAttachment taskAttachment = new TaskAttachment();
+            taskAttachment.setTaskId(task.getTaskId());
+            Long haveAttachment = taskAttachmentMapper.selectTaskAttachmentList(taskAttachment).isEmpty() ? 0L : 1L;
+            taskCreateWithHaveAttachmentDTOList.add(new TaskCreateWithHaveAttachmentDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),task.getStatus(),task.getCreatorId(),haveAttachment));
+        }
+        return taskCreateWithHaveAttachmentDTOList;
     }
 }

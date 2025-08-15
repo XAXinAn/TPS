@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-button type="primary" @click="openDialog">创建任务</el-button>
 
-    <el-dialog v-model="dialogVisible" title="创建任务" width="600px" @close="resetForm">
+    <el-dialog v-model="dialogVisible" title="创建任务" width="800px" @close="resetForm">
       <el-form ref="formRef" :model="formData" :rules="rules" size="default" label-width="100px">
         <el-form-item label="任务标题" prop="title">
           <el-input v-model="formData.title" type="text" placeholder="请输入任务标题" clearable :style="{width: '100%'}"></el-input>
@@ -59,8 +59,18 @@
       <el-table-column prop="title" label="任务标题"></el-table-column>
       <el-table-column prop="description" label="描述"></el-table-column>
       <el-table-column prop="deadline" label="截止日期"></el-table-column>
-      <el-table-column prop="creatorName" label="创建人"></el-table-column>
-      <el-table-column prop="attachmentName" label="附件名称"></el-table-column>
+      <el-table-column prop="needConfirm" label="是否需发起人确认"></el-table-column>
+      <el-table-column prop="status" label="任务状态"></el-table-column>
+      <el-table-column label="操作" width="220px">
+        <template #default="scope">
+          <el-button
+              link
+              type="primary"
+              @click="handleDownload(scope.row)"
+              v-if="scope.row.haveAttachment === 1"
+          >下载附件</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -199,6 +209,11 @@ function resetForm() {
   if (formRef.value) {
     formRef.value.resetFields();
   }
+}
+
+/** 下载附件 */
+function handleDownload(row) {
+  proxy.download(row.attachmentPath);
 }
 </script>
 
