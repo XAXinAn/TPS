@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS task (
     need_confirm TINYINT(1) NOT NULL COMMENT '是否需发起人确认（0=false，1=true）',
     status VARCHAR(20) NOT NULL DEFAULT '进行中' COMMENT '任务状态（进行中/待确认/已完成）',
     creator_id bigint(20) NOT NULL COMMENT '创建人ID（关联sys_user表）',
+    attachment VARCHAR(512) DEFAULT NULL COMMENT '附件URL',
     create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '任务创建时间',
     update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
     PRIMARY KEY (task_id),
@@ -54,7 +55,15 @@ CREATE TABLE IF NOT EXISTS task_notice (
     CONSTRAINT fk_notice_user FOREIGN KEY (user_id) REFERENCES sys_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='任务通知表';
 
-CREATE TABLE task_org (
+CREATE TABLE IF NOT EXISTS `task_attachment` (
+    attachment_id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '附件ID',
+    task_id       bigint(20) NOT NULL COMMENT '任务ID',
+    attachment_url varchar(512) NOT NULL COMMENT '附件URL',
+    create_time   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (attachment_id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='任务附件表';
+
+CREATE TABLE IF NOT EXISTS task_org (
     ORG_ID BIGINT NOT NULL AUTO_INCREMENT COMMENT '支行ID',
     ORG_NAME VARCHAR(100) DEFAULT NULL COMMENT '支行名称',
     ORG1_ID VARCHAR(32) DEFAULT NULL COMMENT '支行机构号',

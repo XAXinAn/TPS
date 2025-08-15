@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.tps.mapper.TaskAttachmentMapper">
+    
+    <resultMap type="TaskAttachment" id="TaskAttachmentResult">
+        <result property="attachmentId"    column="attachment_id"    />
+        <result property="taskId"    column="task_id"    />
+        <result property="attachmentUrl"    column="attachment_url"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTaskAttachmentVo">
+        select attachment_id, task_id, attachment_url, create_time from task_attachment
+    </sql>
+
+    <select id="selectTaskAttachmentList" parameterType="TaskAttachment" resultMap="TaskAttachmentResult">
+        <include refid="selectTaskAttachmentVo"/>
+        <where>  
+            <if test="taskId != null "> and task_id = #{taskId}</if>
+            <if test="attachmentUrl != null  and attachmentUrl != ''"> and attachment_url = #{attachmentUrl}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaskAttachmentByAttachmentId" parameterType="Long" resultMap="TaskAttachmentResult">
+        <include refid="selectTaskAttachmentVo"/>
+        where attachment_id = #{attachmentId}
+    </select>
+
+    <insert id="insertTaskAttachment" parameterType="TaskAttachment" useGeneratedKeys="true" keyProperty="attachmentId">
+        insert into task_attachment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">task_id,</if>
+            <if test="attachmentUrl != null and attachmentUrl != ''">attachment_url,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">#{taskId},</if>
+            <if test="attachmentUrl != null and attachmentUrl != ''">#{attachmentUrl},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaskAttachment" parameterType="TaskAttachment">
+        update task_attachment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskId != null">task_id = #{taskId},</if>
+            <if test="attachmentUrl != null and attachmentUrl != ''">attachment_url = #{attachmentUrl},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where attachment_id = #{attachmentId}
+    </update>
+
+    <delete id="deleteTaskAttachmentByAttachmentId" parameterType="Long">
+        delete from task_attachment where attachment_id = #{attachmentId}
+    </delete>
+
+    <delete id="deleteTaskAttachmentByAttachmentIds" parameterType="String">
+        delete from task_attachment where attachment_id in 
+        <foreach item="attachmentId" collection="array" open="(" separator="," close=")">
+            #{attachmentId}
+        </foreach>
+    </delete>
+</mapper>
