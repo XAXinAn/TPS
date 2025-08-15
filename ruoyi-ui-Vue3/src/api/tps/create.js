@@ -14,3 +14,10 @@ export function createTask(data) {
         data: data
     })
 }
+
+export function listAllTasks() {
+    return request({
+        url: '/tps/task/listAllTasks',
+        method: 'get'
+    })
+}

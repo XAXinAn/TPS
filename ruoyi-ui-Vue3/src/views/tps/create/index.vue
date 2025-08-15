@@ -54,13 +54,21 @@
         </div>
       </template>
     </el-dialog>
+
+    <el-table :data="tasks" style="width: 100%; margin-top: 20px;">
+      <el-table-column prop="title" label="任务标题"></el-table-column>
+      <el-table-column prop="description" label="描述"></el-table-column>
+      <el-table-column prop="deadline" label="截止日期"></el-table-column>
+      <el-table-column prop="creatorName" label="创建人"></el-table-column>
+      <el-table-column prop="attachmentName" label="附件名称"></el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, toRefs, onMounted, getCurrentInstance } from 'vue';
 import { listAllUsers } from '@/api/system/user';
-import { listAllOrgs, createTask } from '@/api/tps/create';
+import { listAllOrgs, createTask, listAllTasks } from '@/api/tps/create';
 import FileUpload from '@/components/FileUpload/index.vue';
 
 // =========== 组件实例、表单引用 ===========
@@ -77,6 +85,7 @@ const recipientTypeOptions = ref([
   { "label": "支行管理层", "value": 1 },
   { "label": "普通员工", "value": 2 }
 ]);
+const tasks = ref([]);
 
 const formState = reactive({
   formData: {
@@ -115,9 +124,19 @@ function closeDialog() {
 onMounted(() => {
   loadUsers();
   loadOrgs();
+  loadTasks();
 });
 
 // =========== 数据加载方法 ===========
+const loadTasks = async () => {
+  try {
+    const res = await listAllTasks();
+    tasks.value = res.data;
+  } catch (error) {
+    console.error('加载任务列表失败:', error);
+  }
+};
+
 const loadUsers = async () => {
   try {
     userLoading.value = true;
@@ -169,6 +188,7 @@ function submitForm() {
     createTask(submitData).then(res => {
       proxy.$modal.msgSuccess('提交成功');
       closeDialog();
+      loadTasks(); // 重新加载任务列表
     }).catch(err => {
       proxy.$modal.msgError('提交失败');
     });
