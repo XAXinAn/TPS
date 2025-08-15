@@ -95,4 +95,8 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
 
         return row;
     }
+
+    public List<Task> selectAllTasks() {
+        return taskMapper.selectTaskList(new Task());
+    }
 }
