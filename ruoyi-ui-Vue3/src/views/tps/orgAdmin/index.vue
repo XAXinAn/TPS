@@ -28,6 +28,7 @@
 
 <script setup>
 import { ref, onMounted, getCurrentInstance } from 'vue';
+import { listOrgAdminTasks } from "@/api/tps/orgAdmin";
 
 const { proxy } = getCurrentInstance();
 
@@ -36,38 +37,13 @@ const loading = ref(true);
 
 /**
  * 获取任务列表
- * TODO: 后端接口准备好后，请替换这里的模拟数据为真实的API调用
  */
 function getTaskList() {
   loading.value = true;
-  // 模拟API调用
-  setTimeout(() => {
-    tasks.value = [
-      {
-        taskId: 101,
-        title: '管理员任务一',
-        description: '这是分配给支行管理员的第一个任务的详细描述。',
-        deadline: '2025-10-01',
-        priority: 3,
-        needConfirm: true,
-        status: '待审核',
-        haveAttachment: true,
-        attachmentUrl: ['/profile/upload/2025/08/18/mock_admin_attachment.docx']
-      },
-      {
-        taskId: 102,
-        title: '管理员任务二',
-        description: '这是第二个管理员任务，关于月度报告审核。',
-        deadline: '2025-09-15',
-        priority: 5,
-        needConfirm: true,
-        status: '进行中',
-        haveAttachment: false,
-        attachmentUrl: []
-      }
-    ];
+  listOrgAdminTasks().then(response => {
+    tasks.value = response.data;
     loading.value = false;
-  }, 500);
+  });
 }
 
 /** 下载附件 */

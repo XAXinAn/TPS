@@ -21,6 +21,16 @@ public class EmployeeTaskDTO {
 
     private String[] attachmentUrl;
 
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Long getTaskId() {
         return taskId;
     }
@@ -96,6 +106,18 @@ public class EmployeeTaskDTO {
         this.attachmentUrl = attachmentUrl;
     }
 
+    public EmployeeTaskDTO(Long taskId, String title, String description, LocalDate deadline, Integer priority, Integer needConfirm, Long haveAttachment, String[] attachmentUrl, String status) {
+        this.taskId = taskId;
+        this.title = title;
+        this.description = description;
+        this.deadline = deadline;
+        this.priority = priority;
+        this.needConfirm = needConfirm;
+        this.haveAttachment = haveAttachment;
+        this.attachmentUrl = attachmentUrl;
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "EmployeeTaskDTO{" +
@@ -107,6 +129,7 @@ public class EmployeeTaskDTO {
                 ", needConfirm=" + needConfirm +
                 ", haveAttachment=" + haveAttachment +
                 ", attachmentUrl=" + Arrays.toString(attachmentUrl) +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

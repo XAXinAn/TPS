@@ -28,6 +28,7 @@
 
 <script setup>
 import { ref, onMounted, getCurrentInstance } from 'vue';
+import { listEmployeeTasks } from "@/api/tps/employee";
 
 const { proxy } = getCurrentInstance();
 
@@ -36,38 +37,13 @@ const loading = ref(true);
 
 /**
  * 获取任务列表
- * TODO: 后端接口准备好后，请替换这里的模拟数据为真实的API调用
  */
 function getTaskList() {
   loading.value = true;
-  // 模拟API调用
-  setTimeout(() => {
-    tasks.value = [
-      {
-        taskId: 1,
-        title: '员工任务一',
-        description: '这是分配给普通员工的第一个任务的详细描述。',
-        deadline: '2025-09-01',
-        priority: 1,
-        needConfirm: true,
-        status: '进行中',
-        haveAttachment: true,
-        attachmentUrl: ['/profile/upload/2025/08/18/mock_attachment.docx']
-      },
-      {
-        taskId: 2,
-        title: '员工任务二',
-        description: '这是第二个任务，没有附件，也不需要确认。',
-        deadline: '2025-09-05',
-        priority: 2,
-        needConfirm: false,
-        status: '待处理',
-        haveAttachment: false,
-        attachmentUrl: []
-      }
-    ];
+  listEmployeeTasks().then(response => {
+    tasks.value = response.data;
     loading.value = false;
-  }, 500);
+  });
 }
 
 /** 下载附件 */
