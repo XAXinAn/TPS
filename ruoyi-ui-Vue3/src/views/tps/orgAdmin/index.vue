@@ -19,7 +19,11 @@
               @click="handleDownload(scope.row)"
               v-if="scope.row.haveAttachment"
           >下载附件</el-button>
-          <!-- 其他操作按钮可以放在这里 -->
+          <el-button
+              link
+              type="primary"
+              @click="handleFeedback(scope.row)"
+          >反馈</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -44,6 +48,12 @@ function getTaskList() {
     tasks.value = response.data;
     loading.value = false;
   });
+}
+
+/** 提交反馈 */
+function handleFeedback(row) {
+  // 在这里实现反馈逻辑，例如弹出一个对话框
+  proxy.$modal.msgSuccess("反馈功能待实现");
 }
 
 /** 下载附件 */
