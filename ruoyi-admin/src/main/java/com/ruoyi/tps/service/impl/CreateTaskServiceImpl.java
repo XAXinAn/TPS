@@ -120,7 +120,8 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
                 String[] finalAttachmentUrl = list.toArray(new String[0]);
                 taskCreateWithHaveAttachmentDTOList.add(new TaskCreateWithHaveAttachmentDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),task.getStatus(),task.getCreatorId(),haveAttachment,finalAttachmentUrl));
             }else {
-                taskCreateWithHaveAttachmentDTOList.add(new TaskCreateWithHaveAttachmentDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),task.getStatus(),task.getCreatorId(),haveAttachment));
+                String[] attachmentUrl = new String[]{};
+                taskCreateWithHaveAttachmentDTOList.add(new TaskCreateWithHaveAttachmentDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),task.getStatus(),task.getCreatorId(),haveAttachment,attachmentUrl));
             }
         }
         return taskCreateWithHaveAttachmentDTOList;

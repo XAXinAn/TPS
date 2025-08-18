@@ -111,18 +111,6 @@ public class TaskCreateWithHaveAttachmentDTO {
     public TaskCreateWithHaveAttachmentDTO() {
     }
 
-    public TaskCreateWithHaveAttachmentDTO(Long taskId, String title, String description, LocalDate deadline, Integer priority, Integer needConfirm, String status, Long creatorId, Long haveAttachment) {
-        this.taskId = taskId;
-        this.title = title;
-        this.description = description;
-        this.deadline = deadline;
-        this.priority = priority;
-        this.needConfirm = needConfirm;
-        this.status = status;
-        this.creatorId = creatorId;
-        this.haveAttachment = haveAttachment;
-    }
-
     public TaskCreateWithHaveAttachmentDTO(Long taskId, String title, String description, LocalDate deadline, Integer priority, Integer needConfirm, String status, Long creatorId, Long haveAttachment, String[] attachmentUrl) {
         this.taskId = taskId;
         this.title = title;
