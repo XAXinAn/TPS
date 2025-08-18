@@ -213,7 +213,8 @@ function resetForm() {
 
 /** 下载附件 */
 function handleDownload(row) {
-  proxy.download(row.attachmentPath);
+  console.log("下载附件:", row);
+  // proxy.download(row.attachmentPath);
 }
 </script>
 

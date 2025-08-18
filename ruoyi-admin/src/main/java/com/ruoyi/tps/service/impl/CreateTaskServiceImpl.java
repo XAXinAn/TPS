@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -109,9 +110,17 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
             taskAttachment.setTaskId(task.getTaskId());
             List<TaskAttachment> taskAttachmentList = taskAttachmentMapper.selectTaskAttachmentList(taskAttachment);
             Long haveAttachment = taskAttachmentList.isEmpty() ? 0L : 1L;
-            taskCreateWithHaveAttachmentDTOList.add(new TaskCreateWithHaveAttachmentDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),task.getStatus(),task.getCreatorId(),haveAttachment));
             if (haveAttachment==1) {
-
+                String[] attachmentUrl = new String[]{};
+                // 转换为 ArrayList
+                List<String> list = new ArrayList<>(Arrays.asList(attachmentUrl));
+                for (TaskAttachment item : taskAttachmentList) {
+                    list.add(item.getAttachmentUrl());
+                }
+                String[] finalAttachmentUrl = list.toArray(new String[0]);
+                taskCreateWithHaveAttachmentDTOList.add(new TaskCreateWithHaveAttachmentDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),task.getStatus(),task.getCreatorId(),haveAttachment,finalAttachmentUrl));
+            }else {
+                taskCreateWithHaveAttachmentDTOList.add(new TaskCreateWithHaveAttachmentDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),task.getStatus(),task.getCreatorId(),haveAttachment));
             }
         }
         return taskCreateWithHaveAttachmentDTOList;
