@@ -213,8 +213,25 @@ function resetForm() {
 
 /** 下载附件 */
 function handleDownload(row) {
-  console.log("下载附件:", row);
-  // proxy.download(row.attachmentPath);
+  if (row.attachmentUrl && Array.isArray(row.attachmentUrl)) {
+    row.attachmentUrl.forEach(url => {
+      // proxy.download(url)
+      // 注意：如果 proxy.download 不能直接处理 URL，可能需要调整。
+      // 例如，如果它需要一个资源路径，而url是完整的，可能需要截取。
+      // 但通常在若依框架中，proxy.download 设计用来处理这种路径。
+      // 为了防止浏览器拦截，可以模拟点击
+      const link = document.createElement('a');
+      link.href = import.meta.env.VITE_APP_BASE_API + url; // 拼接基础API路径
+      link.style.display = 'none';
+      // 从URL中提取文件名
+      link.download = url.substring(url.lastIndexOf('/') + 1);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  } else {
+    proxy.$modal.msgError("没有可下载的附件");
+  }
 }
 </script>
 
