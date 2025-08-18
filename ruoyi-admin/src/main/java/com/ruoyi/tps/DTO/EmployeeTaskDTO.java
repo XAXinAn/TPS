@@ -23,6 +23,8 @@ public class EmployeeTaskDTO {
 
     private String status;
 
+    private String recipientType;
+
     public String getStatus() {
         return status;
     }
@@ -95,18 +97,15 @@ public class EmployeeTaskDTO {
         this.attachmentUrl = attachmentUrl;
     }
 
-    public EmployeeTaskDTO(Long taskId, String title, String description, LocalDate deadline, Integer priority, Integer needConfirm, Long haveAttachment, String[] attachmentUrl) {
-        this.taskId = taskId;
-        this.title = title;
-        this.description = description;
-        this.deadline = deadline;
-        this.priority = priority;
-        this.needConfirm = needConfirm;
-        this.haveAttachment = haveAttachment;
-        this.attachmentUrl = attachmentUrl;
+    public String getRecipientType() {
+        return recipientType;
     }
 
-    public EmployeeTaskDTO(Long taskId, String title, String description, LocalDate deadline, Integer priority, Integer needConfirm, Long haveAttachment, String[] attachmentUrl, String status) {
+    public void setRecipientType(String recipientType) {
+        this.recipientType = recipientType;
+    }
+
+    public EmployeeTaskDTO(Long taskId, String title, String description, LocalDate deadline, Integer priority, Integer needConfirm, Long haveAttachment, String[] attachmentUrl, String recipientType, String status) {
         this.taskId = taskId;
         this.title = title;
         this.description = description;
@@ -115,6 +114,7 @@ public class EmployeeTaskDTO {
         this.needConfirm = needConfirm;
         this.haveAttachment = haveAttachment;
         this.attachmentUrl = attachmentUrl;
+        this.recipientType = recipientType;
         this.status = status;
     }
 

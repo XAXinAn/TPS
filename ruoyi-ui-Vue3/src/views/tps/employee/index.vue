@@ -22,7 +22,7 @@
           >下载附件</el-button>
           <el-button
               link
-              type="primary"
+              type="danger"
               @click="handleFeedback(scope.row)"
           >反馈</el-button>
         </template>
