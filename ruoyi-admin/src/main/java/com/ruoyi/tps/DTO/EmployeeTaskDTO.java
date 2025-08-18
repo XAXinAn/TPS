@@ -1,0 +1,112 @@
+package com.ruoyi.tps.DTO;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
+public class EmployeeTaskDTO {
+    private Long taskId;
+
+    private String title;
+
+    private String description;
+
+    private LocalDate deadline;
+
+    private Integer priority;
+
+    private Integer needConfirm;
+
+    private Long haveAttachment;
+
+    private String[] attachmentUrl;
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+
+    public Integer getNeedConfirm() {
+        return needConfirm;
+    }
+
+    public void setNeedConfirm(Integer needConfirm) {
+        this.needConfirm = needConfirm;
+    }
+
+    public Long getHaveAttachment() {
+        return haveAttachment;
+    }
+
+    public void setHaveAttachment(Long haveAttachment) {
+        this.haveAttachment = haveAttachment;
+    }
+
+    public String[] getAttachmentUrl() {
+        return attachmentUrl;
+    }
+
+    public void setAttachmentUrl(String[] attachmentUrl) {
+        this.attachmentUrl = attachmentUrl;
+    }
+
+    public EmployeeTaskDTO(Long taskId, String title, String description, LocalDate deadline, Integer priority, Integer needConfirm, Long haveAttachment, String[] attachmentUrl) {
+        this.taskId = taskId;
+        this.title = title;
+        this.description = description;
+        this.deadline = deadline;
+        this.priority = priority;
+        this.needConfirm = needConfirm;
+        this.haveAttachment = haveAttachment;
+        this.attachmentUrl = attachmentUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeTaskDTO{" +
+                "taskId=" + taskId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", deadline=" + deadline +
+                ", priority=" + priority +
+                ", needConfirm=" + needConfirm +
+                ", haveAttachment=" + haveAttachment +
+                ", attachmentUrl=" + Arrays.toString(attachmentUrl) +
+                '}';
+    }
+}
