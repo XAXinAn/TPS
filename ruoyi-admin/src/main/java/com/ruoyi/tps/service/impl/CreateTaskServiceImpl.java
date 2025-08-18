@@ -107,8 +107,12 @@ public class CreateTaskServiceImpl implements ICreateTaskService {
         for (Task task : taskList) {
             TaskAttachment taskAttachment = new TaskAttachment();
             taskAttachment.setTaskId(task.getTaskId());
-            Long haveAttachment = taskAttachmentMapper.selectTaskAttachmentList(taskAttachment).isEmpty() ? 0L : 1L;
+            List<TaskAttachment> taskAttachmentList = taskAttachmentMapper.selectTaskAttachmentList(taskAttachment);
+            Long haveAttachment = taskAttachmentList.isEmpty() ? 0L : 1L;
             taskCreateWithHaveAttachmentDTOList.add(new TaskCreateWithHaveAttachmentDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),task.getStatus(),task.getCreatorId(),haveAttachment));
+            if (haveAttachment==1) {
+
+            }
         }
         return taskCreateWithHaveAttachmentDTOList;
     }

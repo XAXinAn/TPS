@@ -26,6 +26,8 @@ public class TaskCreateWithHaveAttachmentDTO {
 
     private Long haveAttachment;
 
+    private String attachmentUrl;
+
     public Long getTaskId() {
         return taskId;
     }
@@ -98,6 +100,14 @@ public class TaskCreateWithHaveAttachmentDTO {
         this.haveAttachment = haveAttachment;
     }
 
+    public String getAttachmentUrl() {
+        return attachmentUrl;
+    }
+
+    public void setAttachmentUrl(String attachmentUrl) {
+        attachmentUrl = attachmentUrl;
+    }
+
     public TaskCreateWithHaveAttachmentDTO() {
     }
 
@@ -125,6 +135,7 @@ public class TaskCreateWithHaveAttachmentDTO {
                 ", status='" + status + '\'' +
                 ", creatorId=" + creatorId +
                 ", haveAttachment=" + haveAttachment +
+                ", attachmentUrl='" + attachmentUrl + '\'' +
                 '}';
     }
 }
