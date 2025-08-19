@@ -46,10 +46,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
                     list.add(item.getAttachmentUrl());
                 }
                 String[] finalAttachmentUrl = list.toArray(new String[0]);
-                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,finalAttachmentUrl,taskRecipient.getRecipientType(),task.getStatus()));
+                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,finalAttachmentUrl,recipient.getRecipientType(),task.getStatus()));
             }else {
                 String[] attachmentUrl = new String[]{};
-                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,attachmentUrl,taskRecipient.getRecipientType(),task.getStatus()));
+                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,attachmentUrl,recipient.getRecipientType(),task.getStatus()));
             }
         }
         return employeeTaskDTOList;
