@@ -47,10 +47,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
                     list.add(item.getAttachmentUrl());
                 }
                 String[] finalAttachmentUrl = list.toArray(new String[0]);
-                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,finalAttachmentUrl,recipient.getRecipientType(),task.getStatus(),SecurityUtils.getUserId()));
+                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,finalAttachmentUrl,task.getStatus(),recipient.getRecipientType(),SecurityUtils.getUserId(),task.getCreatorId()));
             }else {
                 String[] attachmentUrl = new String[]{};
-                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,attachmentUrl,recipient.getRecipientType(),task.getStatus(),SecurityUtils.getUserId()));
+                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,attachmentUrl,task.getStatus(),recipient.getRecipientType(),SecurityUtils.getUserId(),task.getCreatorId()));
             }
         }
         return employeeTaskDTOList;

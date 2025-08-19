@@ -59,7 +59,12 @@
       <el-table-column prop="title" label="任务标题"></el-table-column>
       <el-table-column prop="description" label="描述"></el-table-column>
       <el-table-column prop="deadline" label="截止日期"></el-table-column>
-      <el-table-column prop="needConfirm" label="是否需发起人确认"></el-table-column>
+      <el-table-column prop="priority" label="优先级"></el-table-column>
+      <el-table-column prop="needConfirm" label="是否需发起人确认">
+        <template #default="scope">
+          <span>{{ scope.row.needConfirm ? '是' : '否' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="status" label="任务状态"></el-table-column>
       <el-table-column label="操作" width="220px">
         <template #default="scope">

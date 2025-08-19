@@ -57,4 +57,15 @@ public class TaskFeedbackDTO {
     public void setAttachments(String attachments) {
         this.attachments = attachments;
     }
+
+    @Override
+    public String toString() {
+        return "TaskFeedbackDTO{" +
+                "taskId=" + taskId +
+                ", status='" + status + '\'' +
+                ", comment='" + comment + '\'' +
+                ", createBy=" + createBy +
+                ", attachments='" + attachments + '\'' +
+                '}';
+    }
 }

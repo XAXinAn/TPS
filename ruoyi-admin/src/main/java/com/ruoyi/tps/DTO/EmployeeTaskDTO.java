@@ -27,6 +27,8 @@ public class EmployeeTaskDTO {
 
     private Long userId;
 
+    private Long creatorId;
+
     public String getStatus() {
         return status;
     }
@@ -115,7 +117,15 @@ public class EmployeeTaskDTO {
         this.userId = userId;
     }
 
-    public EmployeeTaskDTO(Long taskId, String title, String description, LocalDate deadline, Integer priority, Integer needConfirm, Long haveAttachment, String[] attachmentUrl, String recipientType, String status, Long userId) {
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    public EmployeeTaskDTO(Long taskId, String title, String description, LocalDate deadline, Integer priority, Integer needConfirm, Long haveAttachment, String[] attachmentUrl, String status, String recipientType, Long userId, Long creatorId) {
         this.taskId = taskId;
         this.title = title;
         this.description = description;
@@ -124,9 +134,10 @@ public class EmployeeTaskDTO {
         this.needConfirm = needConfirm;
         this.haveAttachment = haveAttachment;
         this.attachmentUrl = attachmentUrl;
-        this.recipientType = recipientType;
         this.status = status;
+        this.recipientType = recipientType;
         this.userId = userId;
+        this.creatorId = creatorId;
     }
 
     @Override
@@ -143,6 +154,7 @@ public class EmployeeTaskDTO {
                 ", status='" + status + '\'' +
                 ", recipientType='" + recipientType + '\'' +
                 ", userId=" + userId +
+                ", creatorId=" + creatorId +
                 '}';
     }
 }
