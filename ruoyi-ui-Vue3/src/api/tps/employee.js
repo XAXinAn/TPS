@@ -7,3 +7,12 @@ export function listEmployeeTasks() {
     method: 'get'
   })
 }
+
+// 提交任务反馈
+export function submitFeedback(data) {
+  return request({
+    url: '/tps/employee/submitFeedback',
+    method: 'post',
+    data: data
+  })
+}

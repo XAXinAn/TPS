@@ -20,12 +20,18 @@
               type="primary"
               @click="handleDownload(scope.row)"
               v-if="scope.row.haveAttachment"
-          >下载附件</el-button>
+          >附件</el-button>
           <el-button
               link
               type="danger"
               @click="handleFeedback(scope.row)"
           >反馈</el-button>
+          <el-button
+              link
+              type="warning"
+              @click="handleSplit(scope.row)"
+              v-if="scope.row.recipientType === '支行管理层'"
+          >拆分</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -56,7 +62,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, getCurrentInstance } from 'vue';
-import { listEmployeeTasks } from "@/api/tps/employee";
+import { listEmployeeTasks, submitFeedback } from "@/api/tps/employee";
 
 const { proxy } = getCurrentInstance();
 
@@ -67,6 +73,7 @@ const feedbackFormRef = ref(null);
 
 const feedbackForm = reactive({
   taskId: null,
+  userId: null,
   status: '',
   comment: ''
 });
@@ -90,6 +97,7 @@ function getTaskList() {
 /** 提交反馈 */
 function handleFeedback(row) {
   feedbackForm.taskId = row.taskId;
+  feedbackForm.userId = row.userId;
   if (feedbackFormRef.value) {
     feedbackFormRef.value.resetFields();
   }
@@ -100,10 +108,11 @@ function handleFeedback(row) {
 function submitFeedbackForm() {
   feedbackFormRef.value.validate(valid => {
     if (valid) {
-      // TODO: 调用API将 feedbackForm 提交到后端
-      proxy.$modal.msgSuccess("反馈提交成功");
-      console.log("提交的表单数据:", feedbackForm);
-      feedbackFormVisible.value = false;
+      submitFeedback(feedbackForm).then(response => {
+        proxy.$modal.msgSuccess("反馈提交成功");
+        feedbackFormVisible.value = false;
+        getTaskList(); // 刷新列表
+      });
     }
   });
 }
@@ -111,6 +120,12 @@ function submitFeedbackForm() {
 /** 取消反馈 */
 function cancelFeedback() {
   feedbackFormVisible.value = false;
+}
+
+/** 任务拆分 */
+function handleSplit(row) {
+  console.log("拆分任务:", row);
+  proxy.$modal.msgSuccess("拆分任务信息已打印到控制台");
 }
 
 /** 下载附件 */

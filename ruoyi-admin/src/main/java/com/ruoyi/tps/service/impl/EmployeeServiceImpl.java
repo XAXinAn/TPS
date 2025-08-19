@@ -3,6 +3,7 @@ package com.ruoyi.tps.service.impl;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.tps.DTO.EmployeeTaskDTO;
 import com.ruoyi.tps.DTO.TaskCreateWithHaveAttachmentDTO;
+import com.ruoyi.tps.DTO.TaskFeedbackDTO;
 import com.ruoyi.tps.domain.Task;
 import com.ruoyi.tps.domain.TaskAttachment;
 import com.ruoyi.tps.domain.TaskRecipient;
@@ -46,12 +47,17 @@ public class EmployeeServiceImpl implements IEmployeeService {
                     list.add(item.getAttachmentUrl());
                 }
                 String[] finalAttachmentUrl = list.toArray(new String[0]);
-                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,finalAttachmentUrl,recipient.getRecipientType(),task.getStatus()));
+                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,finalAttachmentUrl,recipient.getRecipientType(),task.getStatus(),SecurityUtils.getUserId()));
             }else {
                 String[] attachmentUrl = new String[]{};
-                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,attachmentUrl,recipient.getRecipientType(),task.getStatus()));
+                employeeTaskDTOList.add(new EmployeeTaskDTO(task.getTaskId(),task.getTitle(),task.getDescription(),task.getDeadline(),task.getPriority(),task.getNeedConfirm(),haveAttachment,attachmentUrl,recipient.getRecipientType(),task.getStatus(),SecurityUtils.getUserId()));
             }
         }
         return employeeTaskDTOList;
+    }
+
+    public int taskFeedback(TaskFeedbackDTO taskFeedbackDTO){
+        System.out.println(taskFeedbackDTO);
+        return 1;
     }
 }
