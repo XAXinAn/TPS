@@ -6,6 +6,7 @@
       <el-table-column prop="description" label="描述" show-overflow-tooltip></el-table-column>
       <el-table-column prop="deadline" label="截止日期" width="120"></el-table-column>
       <el-table-column prop="priority" label="优先级" width="100"></el-table-column>
+      <el-table-column prop="recipientType" label="接收方类型" width="100"></el-table-column>
       <el-table-column prop="needConfirm" label="是否需确认" width="120">
         <template #default="scope">
           <span>{{ scope.row.needConfirm ? '是' : '否' }}</span>
