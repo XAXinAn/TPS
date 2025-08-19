@@ -37,7 +37,7 @@
     </el-table>
 
     <!-- Feedback Dialog -->
-    <el-dialog title="任务反馈" v-model="feedbackFormVisible" width="500px" append-to-body>
+    <el-dialog title="任务反馈" v-model="feedbackFormVisible" width="800px" append-to-body>
       <el-form ref="feedbackFormRef" :model="feedbackForm" :rules="feedbackRules" label-width="80px">
         <el-form-item label="反馈状态" prop="status">
           <el-select v-model="feedbackForm.status" placeholder="请选择状态">
@@ -48,6 +48,9 @@
         </el-form-item>
         <el-form-item :label="feedbackForm.status === '未完成' ? '原因' : '评论'" prop="comment">
           <el-input v-model="feedbackForm.comment" type="textarea" placeholder="请输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="上传附件">
+          <FileUpload v-model="feedbackForm.attachments" :file-size="50" :file-type="['doc', 'docx', 'png', 'jpg']"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -63,8 +66,11 @@
 <script setup>
 import { ref, reactive, onMounted, getCurrentInstance } from 'vue';
 import { listEmployeeTasks, submitFeedback } from "@/api/tps/employee";
+import useUserStore from '@/store/modules/user';
+import FileUpload from '@/components/FileUpload/index.vue';
 
 const { proxy } = getCurrentInstance();
+const userStore = useUserStore();
 
 const tasks = ref([]);
 const loading = ref(true);
@@ -73,9 +79,10 @@ const feedbackFormRef = ref(null);
 
 const feedbackForm = reactive({
   taskId: null,
-  userId: null,
   status: '',
-  comment: ''
+  comment: '',
+  createBy: null,
+  attachments: ''
 });
 
 const feedbackRules = reactive({
@@ -97,7 +104,6 @@ function getTaskList() {
 /** 提交反馈 */
 function handleFeedback(row) {
   feedbackForm.taskId = row.taskId;
-  feedbackForm.userId = row.userId;
   if (feedbackFormRef.value) {
     feedbackFormRef.value.resetFields();
   }
@@ -108,6 +114,7 @@ function handleFeedback(row) {
 function submitFeedbackForm() {
   feedbackFormRef.value.validate(valid => {
     if (valid) {
+      feedbackForm.createBy = userStore.id; // 添加创建人ID
       submitFeedback(feedbackForm).then(response => {
         proxy.$modal.msgSuccess("反馈提交成功");
         feedbackFormVisible.value = false;
@@ -156,3 +163,4 @@ onMounted(() => {
   padding: 20px;
 }
 </style>
+
